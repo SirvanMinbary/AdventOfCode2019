@@ -17,6 +17,7 @@ namespace Day3
             ParseWireInput(input[0], wire1);
             ParseWireInput(input[1], wire2);
             var intersections = FindIntersections(wire1, wire2);
+
             var distances = new List<int>();
             foreach (var item in intersections)
             {
@@ -25,25 +26,26 @@ namespace Day3
 
             distances = distances.OrderBy(d => d).ToList();
 
-            Console.WriteLine(distances[0]);
+            Console.WriteLine($"shortest distance is {distances[0]}");
+
+            var steps = intersections.Select(p => p.StepsTaken).OrderBy(x => x).ToList();
+
+            Console.WriteLine($"shortest steps taken is {steps[0]}");
+
+            Console.ReadLine();
         }
 
         public static void ParseWireInput(string wireInput, Wire wire)
         {
-            foreach (var item in wireInput.Split(','))
+            foreach (var instruction in wireInput.Split(','))
             {
-                ParseMovement(item, wire);
-            }
-        }
+                var direction = instruction.Substring(0, 1);
+                var steps = int.Parse(instruction.Substring(1));
 
-        private static void ParseMovement(string input, Wire wire)
-        {
-            var direction = input.Substring(0, 1);
-            var countRemaining = int.Parse(input.Substring(1));
-
-            for (int i = 0; i < countRemaining; i++)
-            {
-                wire.MoveWire(direction);
+                for (int i = 0; i < steps; i++)
+                {
+                    wire.MoveWire(direction);
+                }
             }
         }
 
@@ -61,6 +63,7 @@ namespace Day3
                 var intersection = wire2.PositionHistory.Find(p => p.X == position.X && p.Y == position.Y);
                 if (intersection != null)
                 {
+                    intersection.StepsTaken += position.StepsTaken;
                     intersections.Add(intersection);
                 }
             }
@@ -70,34 +73,14 @@ namespace Day3
 
         public static int CalculateManhattanDistance(Position position)
         {
-            int xDistance = 0;
-            if (position.X > 0)
-            {
-                xDistance = position.X;
-            }
-            else
-            {
-                xDistance = position.X * (-1);
-            }
-
-            int yDistance = 0;
-            if (position.Y > 0)
-            {
-                yDistance = position.Y;
-            }
-            else
-            {
-                yDistance = position.Y * (-1);
-            }
-
-            return xDistance + yDistance;
+            return Math.Abs(position.X) + Math.Abs(position.Y);
         }
-
 
         public class Position
         {
             public int X { get; set; }
             public int Y { get; set; }
+            public int StepsTaken { get; set; }
         }
 
         public class Wire
@@ -107,7 +90,7 @@ namespace Day3
 
             public void MoveWire(string direction)
             {
-                PositionHistory.Add(new Position { X = CurrentPosition.X, Y = CurrentPosition.Y });
+                PositionHistory.Add(new Position { X = CurrentPosition.X, Y = CurrentPosition.Y, StepsTaken = CurrentPosition.StepsTaken });
 
                 switch (direction)
                 {
@@ -124,9 +107,9 @@ namespace Day3
                         CurrentPosition.Y--;
                         break;
                 }
+
+                CurrentPosition.StepsTaken++;
             }
         }
-
-
     }
 }
