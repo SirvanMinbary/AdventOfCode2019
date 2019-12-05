@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="Day1Tests.cs" />
     <Compile Include="Day2Tests.cs" />
-    <Compile Include="Day3Tests.cs" />
+    <Compile Include="Day4Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +64,10 @@
     <ProjectReference Include="..\Day2\Day2.csproj">
       <Project>{4170339b-8af9-4c08-a7dc-fb19b55d475c}</Project>
       <Name>Day2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Day4\Day4.csproj">
+      <Project>{44772098-26bc-4e7b-b12b-494fc8b721e7}</Project>
+      <Name>Day4</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
